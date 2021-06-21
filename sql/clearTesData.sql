@@ -1,0 +1,15 @@
+use tes;
+truncate table  robot;
+truncate table  t_navi;
+truncate table  t_navi_avoid;
+truncate table  t_navi_loop;
+truncate table  session;
+truncate table  task;
+truncate table  task_dependency;
+truncate table  signal_order;
+truncate table  step;
+truncate table  step_dependency;
+truncate table  command;
+truncate table  frame;
+truncate table  warehouse_sn_info;
+truncate table  conveyor_biz_register;

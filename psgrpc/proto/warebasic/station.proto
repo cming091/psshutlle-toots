@@ -1,0 +1,108 @@
+syntax = "proto3";
+option go_package = "git-pd.megvii-inc.com/slg-service/frworkstation/internal/grpc/warebasic";
+package warebasic;
+
+import "common.proto";
+import "stationTypeEnum.proto";
+
+service StationService {
+  // 新增工作站
+  rpc AddStation(AddStationRequest) returns (common.CommonResponse) {}
+
+  // 查询工作站列表
+  rpc QueryStationList(QueryStationListRequest)
+      returns (QueryStationListResponse) {}
+
+  // 查询工作站详情
+  rpc QueryStationDetail(QueryStationDetailRequest)
+      returns (QueryStationDetailResponse) {}
+
+  // 更新工作站
+  rpc UpdateStation(UpdateStationRequest) returns (common.CommonResponse) {}
+
+  // 启用工作站
+  rpc EnableStation(EnableStationRequest) returns (common.CommonResponse) {}
+
+  // 禁用工作站
+  rpc DisableStation(DisableStationRequest) returns (common.CommonResponse) {}
+}
+
+message AddStationRequest {
+  string warehouseCode = 1;               //仓库编码
+  string regionCode = 2;                  //子仓编码
+  string stationID = 3;                   //工作站ID
+  string stationCode = 4;                 //工作站编码
+  string stationGroupCode = 5;            //工作站组编码
+  string stationName = 6;                 //工作站名称
+  common.StationTypeEnum stationType = 7; //工作站类型
+  string stationDesc = 8;                 //工作站描述
+  string entryPoint = 9;                  //工作站入口点
+  string node4device = 10;                //工作站关联设备ID
+  int32 transInvFlag = 11; //是否库存转移工作站:0=不是,1=是
+  string fromRegion = 12;  //起点子仓
+  string toRegion = 13;    //终点子仓
+  int32 msgFlag = 14;      //是否信息流驱动:0=不是,1=是
+}
+
+message QueryStationListRequest {
+  string warehouseCode = 1;                 //仓库编码
+  string regionCode = 2;                    //子仓编码
+  common.StationTypeEnum stationType = 3;   //工作站类型
+  repeated string stationGroupCodeList = 4; //工作站组编码
+}
+
+message QueryStationListResponse {
+  int64 returnCode = 1;
+  string returnMsg = 2;
+  string returnUserMsg = 3;
+  StationList data = 4;
+}
+
+message StationList { repeated StationDetail list = 1; }
+
+message StationDetail {
+  string warehouseCode = 1;               //仓库编码
+  string regionCode = 2;                  //子仓编码
+  string stationID = 3;                   //工作站ID
+  string stationCode = 4;                 //工作站编码
+  string stationGroupCode = 5;            //工作站组编码
+  string stationName = 6;                 //工作站名称
+  common.StationTypeEnum stationType = 7; //工作站类型
+  string stationDesc = 8;                 //工作站描述
+  int32 stationStatus = 9;                //工作站状态:0=启用,1=禁用
+  string entryPoint = 10;                 //工作站入口点
+  string node4device = 11;                //工作站关联设备ID
+  int32 transInvFlag = 12; //是否库存转移工作站:0=不是,1=是
+  string fromRegion = 13;  //起点子仓
+  string toRegion = 14;    //终点子仓
+  int32 msgFlag = 15;      //是否信息流驱动:0=不是,1=是
+}
+
+message QueryStationDetailRequest {
+  string warehouseCode = 1;            //仓库编码
+  repeated string stationCodeList = 2; //工作站编码列表
+}
+
+message QueryStationDetailResponse {
+  int64 returnCode = 1;
+  string returnMsg = 2;
+  string returnUserMsg = 3;
+  map<string, StationDetail> data = 4;
+}
+
+message UpdateStationRequest {
+  string warehouseCode = 1; //仓库编码
+  string stationCode = 2;   //工作站编码
+  string stationName = 3;   //工作站名称
+  string stationDesc = 4;   //工作站描述
+}
+
+message EnableStationRequest {
+  string warehouseCode = 1; //仓库编码
+  string stationCode = 2;   //工作站编码
+}
+
+message DisableStationRequest {
+  string warehouseCode = 1; //仓库编码
+  string stationCode = 2;   //工作站编码
+}

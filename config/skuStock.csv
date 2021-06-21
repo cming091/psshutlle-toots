@@ -1,0 +1,10 @@
+ID,regionCode,containercode,skucode,qty,containertype,palletmodal,rfid,trayContainerCode
+1,PSRegion,101,6,100,1,0,rfid20010,10001
+2,PSRegion,102,6,100,1,0,rfid20011,10001
+3,PSRegion,103,6,100,1,0,rfid20012,10001
+4,PSRegion,104,6,100,1,0,rfid20013,10001
+5,PSRegion,105,6,100,1,0,rfid20014,10001
+6,PSRegion,106,6,100,1,0,rfid20015,10001
+7,PSRegion,107,6,100,1,0,rfid20016,10001
+8,,70001,6,100,2,0,rfid20016,10001
+

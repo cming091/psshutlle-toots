@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+option go_package = "git-pd.megvii-inc.com/slg-service/frworkstation/internal/grpc/common";
+
+package common;
+option java_package = "com.megvii.lbg.wes.grpc.common";
+
+enum TransTypeEnum {
+  TrasnTypeUNKNOWN = 0;
+  CartonAdd = 1;
+  ExchangeAdd = 2;
+  CartonOut = 3;
+  PickOut = 4;
+  CartonIn = 5;
+  ExchangeIn = 6;
+  TailIn = 7;
+  Inventory = 8;
+  CTUOut = 9;
+  CTUCombine = 10;
+  CTUIn = 11;
+  CTUOB = 12;
+  PSNormalIn = 13;
+  PSCollect = 14;
+  PSTail = 15;
+  PSPalletOut = 16;
+  PSPalletIn = 17;
+  PSCarton = 101;
+  PSCrate = 102;
+  PSArm = 103;
+};

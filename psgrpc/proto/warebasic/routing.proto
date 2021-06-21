@@ -1,0 +1,117 @@
+syntax = "proto3";
+option go_package = "git-pd.megvii-inc.com/slg-service/frworkstation/internal/grpc/warebasic";
+package warebasic;
+
+import "transTypeEnum.proto";
+
+service RoutingService {
+  // 查询起始工作站
+  rpc QueryOriginalStation(QueryOriginalStationRequest)
+      returns (QueryOriginalStationResponse) {}
+
+  // 查询下一个工作站
+  rpc QueryNextStation(QueryNextStationRequest)
+      returns (QueryNextStationResponse) {}
+
+  // 查询工艺路径
+  rpc QueryRoutingChains(QueryRoutingChainsRequest)
+      returns (QueryRoutingChainsResponse) {}
+
+  // 查询下一个子仓
+  rpc QueryNextRegion(QueryNextRegionRequest)
+      returns (QueryNextRegionResponse) {}
+}
+
+message QueryOriginalStationRequest {
+  string warehouseCode = 1;
+  string regionCode = 2;
+  common.TransTypeEnum transType = 3;
+}
+
+message QueryOriginalStationResponse {
+  int64 returnCode = 1;
+  string returnMsg = 2;
+  string returnUserMsg = 3;
+  OriginalStation data = 4;
+}
+
+message OriginalStation { string originalStation = 1; }
+
+message QueryNextStationRequest {
+  string warehouseCode = 1;
+  string stationCode = 2;
+  int32 transType = 3;
+}
+
+message QueryNextStationResponse {
+  int64 returnCode = 1;
+  string returnMsg = 2;
+  string returnUserMsg = 3;
+  NextStations data = 4;
+}
+
+message NextStations { repeated NextStation nextStations = 1; }
+
+message NextStation {
+  string stationCode = 1;
+  int32 stationType = 2;
+  string condition = 3;
+  int32 priority = 4;
+}
+
+message QueryRoutingChainsRequest {
+  string warehouseCode = 1;
+  common.TransTypeEnum transType = 2;
+  string fromStationCode = 3;
+}
+
+message QueryRoutingChainsResponse {
+  int64 returnCode = 1;
+  string returnMsg = 2;
+  string returnUserMsg = 3;
+  RoutingChains data = 4;
+}
+
+message RoutingChains {
+  repeated RoutingNode chains = 1;
+  map<string, Station> stations = 2;
+}
+
+message RoutingNode {
+  string fromStation = 1;
+  int32 fromStationType = 2;
+  string toStation = 3;
+  int32 toStationType = 4;
+  string condition = 5;
+  int32 priority = 6;
+}
+
+message Station {
+  string stationCode = 1;
+  int32 stationType = 2;
+  string entryPoint = 3;
+  string node4Device = 4;
+  string handShakeInitiator = 5;
+  string handShakeRecipient = 6;
+  int32 drive4Info = 7;
+  string actionType = 8;
+}
+
+message QueryNextRegionRequest {
+  string warehouseCode = 1; //仓库编码
+  string regionCode = 2;    //子仓编码
+}
+
+message QueryNextRegionResponse {
+  int64 returnCode = 1;
+  string returnMsg = 2;
+  string returnUserMsg = 3;
+  NextRegions data = 4;
+}
+
+message NextRegions { repeated NextRegion nextRegions = 1; }
+
+message NextRegion {
+  common.TransTypeEnum transType = 1;
+  string regionCode = 2;
+}

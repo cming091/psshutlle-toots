@@ -1,0 +1,18 @@
+use invtransaction;
+truncate table wo4ib;
+truncate table wo4ob;
+truncate table wo4exchange;
+truncate table wo4transfer;
+truncate table wo_rely;
+truncate table wo_index;
+use process_flow_engine;
+truncate table action_aggregation;
+truncate table work_order;
+truncate table work_order_action;
+truncate table container_context;
+truncate table station_register;
+truncate table container_context_log;
+use frworkstation;
+truncate table ps_inbound;
+truncate table ps_pick;
+truncate table ps_pick_station;

@@ -1,0 +1,176 @@
+syntax = "proto3";
+
+option go_package = "git-pd.megvii-inc.com/slg-service/frworkstation/internal/grpc/common";
+option java_package = "com.megvii.lbg.wes.grpc.common";
+
+package common;
+
+import "transTypeEnum.proto";
+import "desTypeEnum.proto";
+import "actionTypeEnum.proto";
+import "actionStatusEnum.proto";
+import "tesTaskTypEnum.proto";
+import "tesStatusEnum.proto";
+import "tesReporterTypeEnum.proto";
+import "tesDeviceStatusEnum.proto";
+import "stationCodeTypeEnum.proto";
+
+// client message package define
+message ClientPackage {
+  uint64 serial = 1;
+  oneof context { NormalResponse result = 3; }
+}
+
+// server message package define
+message ServerPackage {
+  uint64 serial = 1;
+  oneof context { InvokeRequest invoke = 3; }
+}
+
+// protocol
+
+// Register :
+// client send request
+// server send response
+message NormalResponse {
+  int64 code = 1;
+  string message = 2;
+}
+
+message InvokeRequest {
+  string method = 1;
+  ActAgg action = 2; // 全包buff
+  TesContext msg = 3;
+
+  string stationCode = 4;
+  string stationGroupCode = 5;
+  string containerCode = 6;
+  string warehouseCode = 15;
+
+  oneof index {
+    TesTaskIndex task = 7;              // tes任务通知
+    TesConveyorIndex conveyor = 8;      //箱线数据上报
+    HubCenterLabelIndex label = 9;      // HubCenter
+    TesPalletLineIndex palletLine = 10; //托盘线数据上报
+    TesArmDePallet armDePallet = 11;    //机械臂码垛数据上报
+    TesSendCommandDevice sendCommandDevice = 12; //发送指令设备，目前只有缠膜机
+  }
+}
+
+// base
+
+// server -> agent
+// push action job
+message ActAgg {
+  int64 actionAggId = 1;
+  int64 nextAggId = 2;
+  int64 actionAggSession = 3;
+  TransTypeEnum transType = 4;
+  ActionTypeEnum actionType = 5;
+  string warehouseCode = 6;
+  string stationCode = 7;
+  StationCodeTypeEnum stationType = 8;
+  string transportUnitCode = 9;
+  string containerCode = 10;
+  string containerCodeTo = 11;
+  int64 containerSerialNo = 12;
+  string destinationCode = 13;
+  string skuCode = 14;
+  int32 qty = 15;
+  int32 actualQty = 16;
+  int32 boxQty = 17;
+  string group4OpSeq = 18;
+  string group4Pack = 19;
+  ActionStatusEnum actionStatus = 20;
+  string extInfo = 21;
+  int32 deadLine = 22;
+}
+
+// TesTasContext 全包buff
+// https://wiki.megvii-inc.com/pages/viewpage.action?pageId=124350878
+message TesContext { string buff = 1; } // Todo
+
+// TesTaskIndex 必传 参数
+// https://wiki.megvii-inc.com/pages/viewpage.action?pageId=124350878
+message TesTaskIndex {
+  int64 sessionid = 1;
+  string warehouseID = 2;
+  string clientCode = 3;
+  int64 taskID = 4;
+  DesTypeEnum desType = 5;
+  int64 priority = 6;
+  TesTaskTypEnum taskType = 7;
+  TesStatusEnum status = 8;
+  int64 errorCode = 9;
+  string errorReason = 10;
+  string robotID = 11;
+  string podID = 12;
+  string desNodeID = 13;
+  int64 desBasketID = 14;
+  string desStorageID = 15;
+  string desZoneID = 16;
+}
+
+// TesTasContext 全包buff
+// https://wiki.megvii-inc.com/pages/viewpage.action?pageId=124350878
+message TesConveyorIndex {
+  string warehouseID = 1;
+  string conveyorID = 2;
+  repeated string barCode = 3;
+  repeated string rfidList = 4;
+  string reporterID = 5;
+  TesReporterTypeEnum reporterType = 6;
+  uint64 dateStamp = 7; // timezone
+  int32 length = 8;
+  int32 width = 9;
+  int32 height = 10;
+  int32 weight = 11;
+}
+
+// TesTasContext 全包buff
+// https://wiki.megvii-inc.com/pages/viewpage.action?pageId=124350878
+message HubCenterLabelIndex {
+  string warehouseID = 1;
+  string deviceID = 2;
+  string deviceContext = 3;
+  string deviceAction = 4;
+  string stationCode = 5;
+}
+
+message TesPalletLineIndex {
+  string workPointNode = 1;
+  int32 workPointType = 2;
+  repeated string rfID = 3;
+  string barcode = 4;
+  int32 weight = 5;
+  double theta = 6;
+  string sizeCheck = 7;
+  int32 electricalCheck = 8;
+  int32 button = 9;
+  string ext = 10;
+  uint64 msgSeq = 11;
+  string warehouseID = 12;
+}
+
+message TesArmDePallet {
+  string warehouseID = 1;
+  string reporterID = 3;
+  string podID = 4;
+  int64 taskID = 5;
+  TesReporterTypeEnum reporterType = 6;
+  uint64 dateStamp = 7;
+}
+
+message TesSendCommandDevice {
+  string warehouseID = 1;
+  string clientCode = 2;
+  string requestID = 3;
+  string cmdType = 4;
+  uint64 cmdID = 5;
+  string robotID = 6;
+  string deviceSN = 7;
+  TesDeviceStatusEnum deviceStatus = 8;
+  int64 errorCode = 9;
+  string errorReason = 10;
+  string content = 11;
+}

@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+option go_package = "git-pd.megvii-inc.com/slg-service/frworkstation/internal/grpc/common";
+
+package common;
+option java_package = "com.megvii.lbg.wes.grpc.common";
+
+enum StationTypeEnum {
+  StationTypeUnknown = 0;  //未知类型
+  StationTypeHuman = 1;    //人工工作站
+  StationTypeARM = 2;      //机械臂工作站
+  StationTypeDevice = 3;   //设备工作站:BCR/RFID
+  StationTypeVirtual = 99; //虚拟工作站:子仓-Schedule工作站
+};

@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option go_package = "git-pd.megvii-inc.com/slg-service/frworkstation/internal/grpc/common";
+
+package common;
+
+option java_package = "com.megvii.lbg.wes.grpc.common";
+
+
+enum ActionStatusEnum {
+  ActionStatusTypeInit = 0;       // 初始化
+  ActionStatusTypeProcessing = 1; // 进行中
+  ActionStatusTypeDone = 2;       // 完成
+  ActionStatusTypeCancel = 9;     // 取消
+  ActionStatusTypeFailed = 10;    // 失败
+  ActionStatusTypeTemp = 20;      // 临时
+};

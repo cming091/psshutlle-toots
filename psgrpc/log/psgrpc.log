@@ -1,0 +1,10 @@
+2020-08-19 17:52:11,465 __init__.py[line:73] INFO [outboundBcr ip:10.170.124.11 	 warehouseCode:JY 	 regionCode:PSRegion 	 warehouseID['01711']]
+
+2020-08-19 18:18:00,326 __init__.py[line:73] INFO [outboundBcr ip:10.170.124.11 	 warehouseCode:JY 	 regionCode:PSRegion 	 warehouseID['01711']]
+
+2020-08-19 18:18:29,591 __init__.py[line:73] INFO [outboundBcr ip:10.170.124.11 	 warehouseCode:JY 	 regionCode:PSRegion 	 warehouseID['01711']]
+
+2020-08-19 18:20:00,126 __init__.py[line:73] INFO [outboundBcr ip:10.170.124.11 	 warehouseCode:JY 	 regionCode:PSRegion 	 warehouseID['01711']]
+
+2020-08-19 18:24:10,488 __init__.py[line:73] INFO [outboundBcr ip:10.170.124.11 	 warehouseCode:JY 	 regionCode:PSRegion 	 warehouseID['01711']]
+

@@ -1,0 +1,83 @@
+ip: &ip '10.170.124.110'
+mysqlUrl: '{};3306;root;1234567890///'
+baseUrl: 'http://{}'
+delay: 2
+times: 1000
+isRaise: &isRaise True
+isSimulate: &isSimulate True
+
+wholein:
+ nodeID: '309680989251270668'
+ transType: 13
+ checkPsTable: 'wo4ib'
+ sName: 'wholein'
+ woStatus: 1040
+ onOFF: False
+ quantity: &iqty 7
+ startNodeId: '309680989251270668'
+ isSimulate: *isSimulate
+
+
+wholeout:
+ transType: 16
+ checkPsTable: 'wo4ob'
+ sName: 'wholeout'
+ woStatus: 2040
+ onOFF: False
+ mapID: 1
+ isSimulate: *isSimulate
+
+
+nonSmallPicking:
+ transType: 101
+ checkPsTable: 'wo4ob'
+ quantity: 3
+ iqty: *iqty
+ sName: 'nonSmallPicking'
+ woStatus: 2004
+ onOFF: False
+ endNodeId: '309680989251139596'
+ deviceSN: '10.170.60.14'
+ tagID: 3
+ mapID: 1
+ isSimulate: *isSimulate
+ isNeedAssignAndStock: True
+
+smallPicking:
+ transType: 102
+ checkPsTable: 'wo4ob'
+ quantity: 3
+ iqty: *iqty
+ sName: 'smallPicking'
+ woStatus: 2004
+ onOFF: False
+ endNodeId: '309680989251139596'
+ deviceSN: '10.170.60.14'
+ tagID: 3
+ mapID: 1
+ isSimulate: *isSimulate
+ isNeedAssignAndStock: True
+
+
+
+
+temp:
+  'no': 1234
+  warehouseCode: 'JY'
+  regionCode: 'PSRegion'
+  containerCode: 'containerCode'
+  frameID: 'containerCode'
+  returnCode: 'returnCode'
+  warehouseID: '314293834760585238'
+  nodeID: '309680989251270668'
+  ip: *ip
+  transType: 13
+  skuCode: 'r'
+  skuName: 'skuname2'
+  checkPsTable: 'wo4ib'
+  sName: 'wholein'
+  woStatus: 1003
+  onOFF: False
+  isRaise: *isRaise
+
+

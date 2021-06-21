@@ -1,0 +1,186 @@
+syntax = "proto3";
+option go_package = "git-pd.megvii-inc.com/slg-service/frworkstation/internal/grpc/warebasic";
+package warebasic;
+
+import "common.proto";
+import "containerTypeEnum.proto";
+
+service SkuService {
+  // 新增SKU
+  rpc AddSku(AddSkuRequest) returns (common.CommonResponse) {}
+
+  // 查询SKU列表
+  rpc QuerySkuList(QuerySkuListRequest) returns (QuerySkuListResponse) {}
+
+  // 查询SKU详情
+  rpc QuerySkuDetail(QuerySkuDetailRequest) returns (QuerySkuDetailResponse) {}
+
+  // 更新SKU信息
+  rpc UpdateSku(UpdateSkuRequest) returns (common.CommonResponse) {}
+
+  // 校验SKU包装信息
+  rpc CheckSkuPackage(CheckSkuPackageRequest)
+      returns (CheckSkuPackageResponse) {}
+
+  // 更新SKU包装信息
+  rpc UpdateSkuPackage(UpdateSkuPackageRequest)
+      returns (common.CommonResponse) {}
+
+  // 删除SKU
+  rpc DeleteSku(DeleteSkuRequest) returns (common.CommonResponse) {}
+}
+
+message AddSkuRequest {
+  string skuCode = 1;       // SKU编码
+  string skuName = 2;       // SKU名称
+  string deptNo = 3;        // SKU所属部门
+  string item = 4;          // SKU所属品番
+  int32 band = 5;           // SKU热度
+  int32 length = 6;         // SKU长度(mm)
+  int32 width = 7;          // SKU宽度(mm)
+  int32 height = 8;         // SKU高度(mm)
+  int32 volume = 9;         // SKU体积(mm^3)
+  int32 weight = 10;        // SKU重量(g)
+  double price = 11;        // SKU单价
+  int32 pickUnit = 12;      // SKU拣选单元
+  int32 manageFlag = 13;    // SKU管理标识:1=新品,2=WMS管理,3=WCS管理
+  int32 skuLabel = 14;      // SKU标签:1=正常品,2=特卖品
+  int32 skuType = 15;       // SKU类型:0=单件(solid),1=套装(assort)
+  string color = 16;        // SKU颜色
+  string size = 17;         // SKU尺码
+  string pattern = 18;      // SKU款号
+  string yearSeason = 19;   // SKU生产年份季节
+  string costSeq = 20;      // SKU成本序号
+  string assortCode = 21;   // Assort编码
+  string skuDesc = 22;      // SKU描述
+  int32 packageLength = 23; //包装箱长度(mm)
+  int32 packageWidth = 24;  //包装箱宽度(mm)
+  int32 packageHeight = 25; //包装箱高度(mm)
+  int32 packageAmount = 26; //包装箱箱装量
+}
+
+message QuerySkuListRequest {
+  string deptNo = 1; // SKU所属部门
+  string item = 2;   // SKU所属品番
+}
+
+message QuerySkuListResponse {
+  int64 returnCode = 1;
+  string returnMsg = 2;
+  string returnUserMsg = 3;
+  SkuList data = 4;
+}
+
+message SkuList { repeated Sku list = 1; }
+
+message Sku {
+  string skuCode = 1;    // SKU编码
+  string skuName = 2;    // SKU名称
+  string deptNo = 3;     // SKU所属部门
+  string item = 4;       // SKU所属品番
+  int32 band = 5;        // SKU热度
+  int32 length = 6;      // SKU长度(mm)
+  int32 width = 7;       // SKU宽度(mm)
+  int32 height = 8;      // SKU高度(mm)
+  int32 volume = 9;      // SKU体积(mm^3)
+  int32 weight = 10;     // SKU重量(g)
+  double price = 11;     // SKU价格
+  int32 pickUnit = 12;   // SKU拣选单元
+  int32 manageFlag = 13; //管理标识:1=新品,2=WMS管理,3=WCS管理
+  int32 skuLabel = 14;   // SKU标签:1=正常品,2=特卖品
+}
+
+message QuerySkuDetailRequest {
+  repeated string skuCodeList = 1; // SKU编码列表
+  int32 isNeedExt = 2;             //是否需要SKU扩展信息
+  int32 isNeedPackage = 3;         //是否需要SKU包装信息
+  int32 isNeedLoading = 4;         //是否需要SKU容器装载信息
+}
+
+message QuerySkuDetailResponse {
+  int64 returnCode = 1;
+  string returnMsg = 2;
+  string returnUserMsg = 3;
+  map<string, SkuDetail> data = 4;
+}
+
+message SkuDetail {
+  string skuCode = 1;      // SKU编码
+  string skuName = 2;      // SKU名称
+  string deptNo = 3;       // SKU所属部门
+  string item = 4;         // SKU所属品番
+  int32 band = 5;          // SKU热度
+  int32 length = 6;        // SKU长度(mm)
+  int32 width = 7;         // SKU宽度(mm)
+  int32 height = 8;        // SKU高度(mm)
+  int32 volume = 9;        // SKU体积(mm^3)
+  int32 weight = 10;       // SKU重量(g)
+  double price = 11;       // SKU价格
+  int32 pickUnit = 12;     // SKU拣选单元
+  int32 manageFlag = 13;   //管理标识:1=新品,2=WMS管理,3=WCS管理
+  int32 skuLabel = 14;     // SKU标签:1=正常品,2=特卖品
+  SkuExt ext = 15;         // SKU扩展信息
+  SkuPackage package = 16; // SKU包装信息
+  repeated SkuLoading loadings = 17; // SKU容器装载信息
+}
+
+message SkuExt {
+  int32 skuType = 1;     // SKU类型:0=单件(solid),1=套装(assort)
+  string color = 2;      // SKU颜色
+  string size = 3;       // SKU尺码
+  string pattern = 4;    // SKU款号
+  string yearSeason = 5; // SKU生产年份季节
+  string costSeq = 6;    // SKU成本序号
+  string assortCode = 7; // Assort编码
+  string skuDesc = 8;    // SKU描述
+  int32 minStock = 9;    // SKU最小库存
+  int32 maxStock = 10;   // SKU最大库存
+}
+
+message SkuPackage {
+  string cartonTypeID = 1;  //箱型ID
+  int32 length = 2;         //外包装长度(mm)
+  int32 width = 3;          //外包装宽度(mm)
+  int32 height = 4;         //外包装高度(mm)
+  int32 amount = 5;         //外包装箱装量
+  int32 weight = 6;         //外包装重量(g)
+  string specification = 7; //外包装规格:S=小箱,M=中箱,L=大箱
+  int32 wrappingFlag = 8;   //是否缠膜标识:0=无需缠膜,1=需要缠膜
+}
+
+message SkuLoading {
+  string specsID = 1;                         //容器规格ID
+  common.ContainerTypeEnum containerType = 2; //容器类型
+  int32 length = 3;                           //容器长度(mm)
+  int32 width = 4;                            //容器宽度(mm)
+  int32 height = 5;                           //容器高度(mm)
+  int32 amount = 6;                           //容器装载量
+  int32 weight = 7;                           //容器装载重量(g)
+}
+
+message UpdateSkuRequest {
+  string skuCode = 1; // SKU编码
+  string skuName = 2; // SKU名称
+}
+
+message CheckSkuPackageRequest {}
+
+message CheckSkuPackageResponse {
+  int64 returnCode = 1;
+  string returnMsg = 2;
+  string returnUserMsg = 3;
+}
+
+message UpdateSkuPackageRequest {
+  string warehouseCode = 1; //仓库编码
+  string skuCode = 2;       // SKU编码
+  string boxCode = 3;       //包装箱编码
+  int32 packageLength = 4;  //包装箱长度
+  int32 packageWidth = 5;   //包装箱宽度
+  int32 packageHeight = 6;  //包装箱高度
+  int32 packageWeight = 7;  //包装箱重度
+}
+
+message DeleteSkuRequest {
+  string skuCode = 1; // SKU编码
+}

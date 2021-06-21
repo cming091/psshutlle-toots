@@ -1,0 +1,87 @@
+syntax = "proto3";
+option go_package = "git-pd.megvii-inc.com/slg-service/frworkstation/internal/grpc/warebasic";
+package warebasic;
+
+import "common.proto";
+import "regionTypeEnum.proto";
+
+service RegionService {
+  // 新增子仓
+  rpc AddRegion(AddRegionRequest) returns (common.CommonResponse) {}
+
+  // 查询子仓列表
+  rpc QueryRegionList(QueryRegionListRequest)
+      returns (QueryRegionListResponse) {}
+
+  // 查询子仓详情
+  rpc QueryRegionDetail(QueryRegionDetailRequest)
+      returns (QueryRegionDetailResponse) {}
+
+  // 更新子仓
+  rpc UpdateRegion(UpdateRegionRequest) returns (common.CommonResponse) {}
+}
+
+message AddRegionRequest {
+  string warehouseCode = 1;             //仓库编码
+  string regionID = 2;                  //子仓ID
+  string regionCode = 3;                //子仓编码
+  string regionName = 4;                //子仓名称
+  common.RegionTypeEnum regionType = 5; //子仓类型
+  string regionDesc = 6;                //子仓描述
+  string entryPoint = 7;                //子仓入口点
+}
+
+message QueryRegionListRequest {
+  string warehouseCode = 1;             //仓库编码
+  common.RegionTypeEnum regionType = 2; //子仓类型
+}
+
+message QueryRegionListResponse {
+  int64 returnCode = 1;
+  string returnMsg = 2;
+  string returnUserMsg = 3;
+  RegionList data = 4;
+}
+
+message RegionList { repeated Region list = 1; }
+
+message Region {
+  string warehouseCode = 1;             //仓库编码
+  string regionID = 2;                  //子仓ID
+  string regionCode = 3;                //子仓编码
+  string regionName = 4;                //子仓名称
+  common.RegionTypeEnum regionType = 5; //子仓类型
+  string regionDesc = 6;                //子仓描述
+  string entryPoint = 7;                //子仓入口点
+}
+
+message QueryRegionDetailRequest {
+  string warehouseCode = 1;           //仓库编码
+  repeated string regionCodeList = 2; //子仓编码
+}
+
+message QueryRegionDetailResponse {
+  int64 returnCode = 1;
+  string returnMsg = 2;
+  string returnUserMsg = 3;
+  map<string, RegionDetail> data = 4;
+}
+
+message RegionDetail {
+  string warehouseCode = 1;             //仓库编码
+  string regionID = 2;                  //子仓ID
+  string regionCode = 3;                //子仓编码
+  string regionName = 4;                //子仓名称
+  common.RegionTypeEnum regionType = 5; //子仓类型
+  string regionDesc = 6;                //子仓描述
+  string entryPoint = 7;                //子仓入口点
+  repeated string storageCodeList = 8;  //存储区编码列表
+  repeated string stationCodeList = 9;  //工作站编码列表
+}
+
+message UpdateRegionRequest {
+  string warehouseCode = 1; //仓库编码
+  string regionCode = 2;    //子仓编码
+  string regionName = 3;    //子仓名称
+  string regionDesc = 4;    //子仓描述
+}

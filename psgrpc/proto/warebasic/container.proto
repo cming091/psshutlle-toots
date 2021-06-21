@@ -1,0 +1,101 @@
+syntax = "proto3";
+option go_package = "git-pd.megvii-inc.com/slg-service/frworkstation/internal/grpc/warebasic";
+package warebasic;
+
+import "common.proto";
+import "containerTypeEnum.proto";
+
+service ContainerService {
+  // 新增容器
+  rpc AddContainer(AddContainerRequest) returns (common.CommonResponse) {}
+
+  // 查询容器列表
+  rpc QueryContainerList(QueryContainerListRequest)
+      returns (QueryContainerListResponse) {}
+
+  // 查询容器详情
+  rpc QueryContainerDetail(QueryContainerDetailRequest)
+      returns (QueryContainerDetailResponse) {}
+
+  // 删除容器
+  rpc DeleteContainer(DeleteContainerRequest) returns (common.CommonResponse) {}
+}
+
+message AddContainerRequest {
+  string warehouseCode = 1;                   //仓库编码
+  string containerID = 2;                     //容器ID
+  string containerCode = 3;                   //容器编码
+  string specsID = 4;                         //容器规格ID
+  common.ContainerTypeEnum containerType = 5; //容器类型
+  string cartonTypeID = 6;                    //箱型ID,元箱容器必填
+}
+
+message QueryContainerListRequest {
+  string warehouseCode = 1;                   //仓库编码
+  string specsID = 2;                         //容器规格ID
+  common.ContainerTypeEnum containerType = 3; //容器类型
+}
+
+message QueryContainerListResponse {
+  int64 returnCode = 1;
+  string returnMsg = 2;
+  string returnUserMsg = 3;
+  ContainerList data = 4;
+}
+
+message ContainerList { repeated Container list = 1; }
+
+message Container {
+  string warehouseCode = 1; //仓库编码
+  string containerID = 2;   //容器ID
+  string containerCode = 3; //容器编码
+  string specsID = 4;       //容器规格ID
+  common.ContainerTypeEnum containerType = 5;
+  string cartonTypeID = 6;  //箱型ID
+  string specification = 7; //箱型规格:SML
+  int32 length = 8;         //容器长度(mm)
+  int32 width = 9;          //容器宽度(mm)
+  int32 height = 10;        //容器高度(mm)
+  int32 bottomHeight = 11;  //容器底部高度(mm)
+}
+
+message QueryContainerDetailRequest {
+  string warehouseCode = 1;              //仓库编码
+  repeated string containerCodeList = 2; //容器编码
+}
+
+message QueryContainerDetailResponse {
+  int64 returnCode = 1;
+  string returnMsg = 2;
+  string returnUserMsg = 3;
+  map<string, ContainerDetail> data = 4;
+}
+
+message ContainerDetail {
+  string warehouseCode = 1; //仓库编码
+  string containerID = 2;   //容器ID
+  string containerCode = 3; //容器编码
+  string specsID = 4;       //容器规格ID
+  common.ContainerTypeEnum containerType = 5;
+  string cartonTypeID = 6;                     //箱型ID
+  string specification = 7;                    //箱型规格:SML
+  int32 length = 8;                            //容器长度(mm)
+  int32 width = 9;                             //容器宽度(mm)
+  int32 height = 10;                           //容器高度(mm)
+  int32 bottomHeight = 11;                     //容器底部高度(mm)
+  repeated ContainerBin containerBinList = 12; //容器货位
+}
+
+message ContainerBin {
+  string containerBinID = 1;   //货位ID
+  string containerBinCode = 2; //货位编码
+  int32 x = 3;                 // X轴坐标,货位列
+  int32 y = 4;                 // Y轴坐标,货位面
+  int32 z = 5;                 // Z轴坐标,货位层
+  int32 index = 6;             //货位索引值
+}
+
+message DeleteContainerRequest {
+  string warehouseCode = 1;
+  string containerCode = 2;
+}

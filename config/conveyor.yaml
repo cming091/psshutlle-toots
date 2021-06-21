@@ -1,0 +1,88 @@
+{
+  "conveyors":{ #箱线
+    "con_1": { #箱线ID
+      "warehouseID":"306624539830255650",
+      "speed": 1000, #mm/s
+      "lines": { #线体
+        "line_1": { #线体ID
+          "length":20000, #线体长度，单位mm
+          "dir": 0, #滚动的方向，0:0->10000,1:10000->0
+          "sensors":{ #传感器
+            "sen_1":{ #传感器ID
+              "type": 0, #0:bcr,1:rfid,2:laser
+              "pos": 2000, # 在线体上的位置
+              "station":""
+            },
+            "sen_2":{
+              "type": 2,
+              "pos":4000,
+              "station":"sta_1" #在哪个站点
+            },
+            "sen_3":{
+                "type": 0,
+                "pos":6000,
+                "station":"" #在哪个站点
+            },
+            "sen_4":{
+              "type": 2,
+              "pos":8000,
+              "station":"sta_2" #在哪个站点
+            },
+            "sen_5":{
+              "type": 2,
+              "pos":10000,
+              "station":"" #在哪个站点
+            },
+            "sen_6":{
+              "type": 2,
+              "pos":12000,
+              "station":"sta_3" #在哪个站点
+            },
+            "sen_7":{
+              "type": 0,
+              "pos":14000,
+              "station":"" #在哪个站点
+            },
+            "sen_8":{
+              "type": 2,
+              "pos":16000,
+              "station":"sta_4" #在哪个站点
+            },
+            "sen_9":{
+              "type": 0,
+              "pos":18000,
+              "station":"" #在哪个站点
+            },
+            "sen_10":{
+              "type": 2,
+              "pos":20000,
+              "station":"sta_5" #在哪个站点
+            }
+          },
+          "stations":{ #站点
+            "sta_1":{ #站点ID
+              "bufferCnt":8, #缓冲位数量
+              "pos":4000 #在线上的位置
+            },
+            "sta_2":{ #站点ID
+              "bufferCnt":8, #缓冲位数量
+              "pos":8000 #在线上的位置
+            },
+            "sta_3":{ #站点ID
+              "bufferCnt":8, #缓冲位数量
+              "pos":12000 #在线上的位置
+            },
+            "sta_4":{ #站点ID
+              "bufferCnt":8, #缓冲位数量
+              "pos":16000 #在线上的位置
+            },
+            "sta_5":{ #站点ID
+              "bufferCnt":8, #缓冲位数量
+              "pos":20000 #在线上的位置
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+option go_package = "git-pd.megvii-inc.com/slg-service/frworkstation/internal/grpc/common";
+
+package common;
+option java_package = "com.megvii.lbg.wes.grpc.common";
+
+enum ActionTypeEnum {
+  UnknownAct = 0;
+  MoveAct = 1;
+  Plan4ExchangeAct = 2;
+  CheckAct = 3;
+  CountingAct = 4;
+  LoadBalanceAct = 5;
+  ExchangeAct = 6;
+  LoadAct = 7;
+  ChoiceAct=8;
+  ChangeStatusAct=9;
+  OutAct = 101;
+  InAct = 102;
+  LockAct = 103;
+  UnLockAct = 104;
+  CreateWO4ExchangeAct = 110;
+  CreateWO4IBAct = 111;
+  CreateWO4OBAct = 112;
+  CreateWO4TransferAct = 113;
+  ClearCtxAct=120;
+
+};

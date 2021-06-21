@@ -1,0 +1,404 @@
+syntax = "proto3";
+option go_package = "git-pd.megvii-inc.com/slg-service/frworkstation/internal/grpc/processflowengine";
+package processflowengine;
+
+import "transTypeEnum.proto";
+import "desTypeEnum.proto";
+import "workOrderTypeEnum.proto";
+import "stationCodeTypeEnum.proto";
+import "actionTypeEnum.proto";
+import "countingModeEnum.proto";
+import "bizTypeEnum.proto";
+import "containerTypeEnum.proto";
+import "lockReasonEnum.proto";
+import "containerExceptionTypeEnum.proto";
+import "parameters.proto";
+
+option java_multiple_files = true;
+option java_package = "com.megvii.lbg.wes.grpc.pferpc";
+option java_outer_classname = "PFEService";
+
+// ProcessFlowEngine engine message channel
+service ProcessFlowEngineService {
+  //************invtransaction调用方法  开始**************************
+  //根据workOrder创建action
+  rpc CreateActionChain(CreateActionChainRequest) returns (GeneralResponse) {}
+  //通知workOrder依赖关系
+  rpc NoticeWorkOrderChain(WorkOrderChainRequest) returns (GeneralResponse) {}
+  //通知workOrder取消
+  rpc NoticeWorkOrderCancel(WorkOrderRequest) returns (GeneralResponse) {}
+  //根据WorkOrder生成actionAgg
+  rpc CreateActionAgg(CreateActionAggRequest) returns (GeneralResponse) {}
+
+  //**************invtransaction调用方法  线束************************
+
+  //解除workOrder对应的actionAgg
+  rpc ResetActAggByWO(WorkOrderRequest) returns (GeneralResponse) {}
+
+  //根据task查询对应的workOrder
+  rpc ListWOByTask(TaskParamRequest) returns (WorkOrderResponse) {}
+
+  //************station execute调用方法  开始**************************
+  //执行check action
+  rpc ExecuteCheck(ExeCheckRequest) returns (GeneralResponse) {}
+  //执行LoadBalance action
+  rpc ExecuteLoadBalance(ExeLoadBalanceRequest) returns (GeneralResponse) {}
+  //执行choice action
+  rpc ExecuteChoice(ExeChoiceRequest) returns (GeneralResponse) {}
+  //执行Counting action
+  rpc ExecuteCounting(ExeCountingRequest) returns (GeneralResponse) {}
+  //批量执行MoveAction
+  rpc ExecuteMove(MoveActAgg) returns (GeneralResponse) {}
+  rpc BatchExecuteMove(BatchExecuteMoveRequest) returns (GeneralResponse) {}
+  //执行入库Load类型的action Agg
+  rpc ExecuteIBLoad(ExeIBLoadRequest) returns (GeneralResponse) {}
+  //执行Load类型的action Agg
+  rpc ExecuteLoad(ExeLoadRequest) returns (GeneralResponse) {}
+  //执行Exchange类型的action Agg
+  rpc ExecuteExchange(ExeExchangeRequest) returns (GeneralResponse) {}
+  //执行Exchange类型的action Agg
+  rpc ExecuteExchangeThenLoad(ExeExchangeThenLoadRequest)
+      returns (GeneralResponse) {}
+  //日志记录
+  rpc ExecuteLog(ExeLogRequest) returns (GeneralResponse) {}
+  //异常处理
+  rpc ExecuteExceptionHandler(ExeExceptionHandlerRequest)
+      returns (GeneralResponse) {}
+  //************station execute调用方法  结束**************************
+
+  //获取下一个station
+  rpc NextStation(NextStationRequest) returns (WorkStationResponse) {}
+
+  //************查询actAgg  开始**************************
+  //通用action agg查询,根据workOrder链分组
+  rpc ListActAggGroupByChain(ListActAggRequest) returns (MapActAggResponse) {}
+
+  //通用action agg查询
+  rpc ListActAgg(ListActAggRequest) returns (ListActAggResponse) {}
+
+  rpc ListActAggByContainer(ListActAggContainerRequest)
+      returns (ListActAggResponse) {}
+
+  rpc ListActAggByIds(ActAggIdsRequest) returns (ListActAggResponse) {}
+  //根据task查询对应的actAgg
+  rpc ListActAggByTask(TaskParamRequest) returns (ListActAggResponse) {}
+  //************查询actAgg  结束**************************
+
+  //查询ContainerContext
+  rpc QueryContainerCtx(ContainerCtxQueryRequest)
+      returns (ContainerCtxResponse) {}
+
+  rpc ClearContainerCtxException(ContainerCtxQueryRequest)
+      returns (GeneralResponse) {}
+  //给tes设备下发指令
+  rpc sendCommandToTes(SendCommandRequest) returns (GeneralResponse) {}
+}
+
+message GeneralResponse {
+  int64 returnCode = 1;
+  string returnMsg = 2;
+  string returnUserMsg = 3;
+}
+message WorkStationResponse {
+  int64 returnCode = 1;
+  string returnMsg = 2;
+  string returnUserMsg = 3;
+  oneof data { WorkStation station = 4; }
+}
+
+message WorkOrderResponse {
+  int64 returnCode = 1;
+  string returnMsg = 2;
+  string returnUserMsg = 3;
+  oneof data { WorkOrderOfTask workOrderOfTask = 4; }
+}
+message ContainerCtxResponse {
+  int64 returnCode = 1;
+  string returnMsg = 2;
+  string returnUserMsg = 3;
+  oneof data { ContainerCtx containerCtx = 4; }
+}
+
+message MapActAggResponse {
+  int64 returnCode = 1;
+  string returnMsg = 2;
+  string returnUserMsg = 3;
+  oneof data { ListActAggRet listActAggRet = 4; }
+}
+
+message ListActAggResponse {
+  int64 returnCode = 1;
+  string returnMsg = 2;
+  string returnUserMsg = 3;
+  repeated common.ActAgg data = 4;
+}
+
+message WorkStation { string stationCode = 1; }
+
+message WorkOrderOfTask { repeated StrListValEntry entry = 1; }
+message StrListValEntry {
+  string key = 1;
+  repeated string value = 2;
+}
+
+message ListActAggRet { repeated AggListValEntry entry = 1; }
+
+message AggListValEntry {
+  string key = 1;
+  repeated common.ActAgg value = 2;
+}
+
+message WorkOrderChainRequest {
+  string warehouseCode = 1;
+  repeated WorkOrderChain chain = 2;
+}
+// c依赖b，b依赖a，则对应顺序为a,b,c
+message WorkOrderChain {
+  string preWoNo = 1;
+  string nextWoNo = 2;
+}
+
+message WorkOrderRequest {
+  string warehouseCode = 1;
+  repeated string woNo = 2;
+}
+
+message TaskParamRequest {
+  string warehouseCode = 1;
+  repeated int64 taskId = 2;
+}
+
+message ActAggIdsRequest {
+  string warehouseCode = 1;
+  repeated int64 actAggId = 2;
+}
+
+message NextStationRequest {
+  string warehouseCode = 1;
+  string containerCode = 2;
+  int64 containerSerialNo = 3;
+  string transportUnitCode = 4;
+}
+
+message CreateActionChainRequest {
+  string warehouseCode = 1;
+  string workOrderNo = 2;
+  common.WorkOrderTypeEnum workOrderType = 3;
+  common.TransTypeEnum transType = 4;
+  string regionCode = 5;
+  string waveNo = 6;
+  string skuCode = 7;
+  int32 qty = 8;
+  int32 boxQty = 10;
+  string destination = 11;
+  string transportUnitCode = 12;
+  string containerCode = 13;
+  string containerCodeTo = 14;
+  string ext = 15;
+  string regionCodeTo = 16;
+  int64 containerSerialNo = 17;
+}
+
+message CreateActionAggRequest {
+  string warehouseCode = 1;
+  repeated WorkOrder workOrders = 2;
+}
+message WorkOrder {
+  string woNo = 1;
+  string group4OpSeq = 2;
+  string group4Pack = 3;
+}
+
+message BatchExecuteMoveRequest { repeated MoveActAgg moveActAgg = 1; }
+
+message MoveActAgg {
+  common.ActionTypeEnum actionType = 1;
+  string warehouseCode = 2;
+  common.StationCodeTypeEnum stationType = 3; // 1 工作站2 工作站组
+  string stationCode = 4;
+  string containerCode = 5;
+  string transportUnitCode = 6;
+  string destinationCode = 7;
+  string tesMsg = 8;
+  common.DesTypeEnum desType = 9; //当值为100时，以下3个可以不传
+  string desNodeID = 10;          //导航点ID   desType=1时必传
+  string desStorageID = 11;       //储位ID  desType=2时必传
+  string desZoneID = 12;          //目标区域ID  desType=3时必传
+  string extJSON = 13;
+}
+
+message ExeCheckRequest {
+  string warehouseCode = 1;
+  common.StationCodeTypeEnum stationType = 2; // 1 工作站2 工作站组
+  string stationCode = 3;
+  string containerCode = 4;
+  string skuCode = 5;
+  string appCtx = 6; //附加信息
+  string destinationCode = 7;
+  string tesMsg = 8;
+  common.DesTypeEnum desType = 9; //当值为100时，以下3个可以不传
+  string desNodeID = 10;          //导航点ID   desType=1时必传
+  string desStorageID = 11;       //储位ID  desType=2时必传
+  string desZoneID = 12;          //目标区域ID  desType=3时必传
+  bool autoMove = 13;             //是否自动执行下一个move
+  string requestId = 14;          //请求ID
+}
+
+message ExeExceptionHandlerRequest {
+  string warehouseCode = 1;
+  common.StationCodeTypeEnum stationType = 2; // 1 工作站2 工作站组
+  string stationCode = 3;
+  string containerCode = 5;
+  oneof handleActionType {
+    ExeCheckRequest checkRequest = 6;
+    ExeIBLoadRequest ibLoadRequest = 7;
+  }
+}
+
+message ExeLoadBalanceRequest {
+  string warehouseCode = 1;
+  common.StationCodeTypeEnum stationType = 2; // 1 工作站2 工作站组
+  string stationCode = 3;
+  string transportUnitCode = 4;
+  string destinationCode = 7;
+  string tesMsg = 8;
+  common.DesTypeEnum desType = 9; //当值为100时，以下3个可以不传
+  string desNodeID = 10;          //导航点ID   desType=1时必传
+  string desStorageID = 11;       //储位ID  desType=2时必传
+  string desZoneID = 12;          //目标区域ID  desType=3时必传
+}
+message ExeChoiceRequest {
+  string warehouseCode = 1;
+  common.StationCodeTypeEnum stationType = 2; // 1 工作站2 工作站组
+  string stationCode = 3;
+  string transportUnitCode = 4;
+  string destinationCode = 7;
+  string tesMsg = 8;
+  common.DesTypeEnum desType = 9; //当值为100时，以下3个可以不传
+  string desNodeID = 10;          //导航点ID   desType=1时必传
+  string desStorageID = 11;       //储位ID  desType=2时必传
+  string desZoneID = 12;          //目标区域ID  desType=3时必传
+}
+
+message ExeLogRequest {
+  string warehouseCode = 1;
+  common.StationCodeTypeEnum stationType = 2; // 1 工作站2 工作站组
+  string stationCode = 3;
+  string containerCode = 5;
+  string appCtx = 6;
+}
+
+message ExeCountingRequest {
+  common.CountingModeEnum countingMode = 1; // 1 一盘2 二盘
+  string warehouseCode = 2;
+  common.StationCodeTypeEnum stationType = 3; // 1 工作站2 工作站组
+  string stationCode = 4;
+  string containerCode = 5;
+  string skuCode = 6;
+  int32 actualQty = 7;
+  string RFIDList = 8;
+  string destinationCode = 9;
+  string tesMsg = 10;
+  common.DesTypeEnum desType = 11; //当值为100时，以下3个可以不传
+  string desNodeID = 12;           //导航点ID   desType=1时必传
+  string desStorageID = 13;        //储位ID  desType=2时必传
+  string desZoneID = 14;           //目标区域ID  desType=3时必传
+}
+
+message ExeIBLoadRequest {
+  string warehouseCode = 1;
+  common.StationCodeTypeEnum stationType = 2; // 1 工作站2 工作站组
+  string stationCode = 3;
+  common.TransTypeEnum transType = 4;
+  string containerCode = 5;
+  string skuCode = 6;
+  int32 actualQty = 7;
+  int32 qty = 8;
+  int32 boxQty = 9;
+  string regionCode = 10;
+  string destinationCode = 11;
+  string appCtx = 12; //附加信息
+  string requestId = 13;
+}
+
+message ExeLoadRequest {
+  string warehouseCode = 1;
+  string transCode = 2;
+  string containerCode = 3;
+}
+
+message ExeExchangeRequest {
+  string warehouseCode = 1;
+  common.StationCodeTypeEnum stationType = 2; // 1 工作站2 工作站组
+  string stationCode = 3;
+  string containerCode = 4;
+  string containerCodeTo = 5;
+  string transCode = 6;
+  int64 actionAggId = 7;
+  int32 actualQty = 8;
+  string skuCode = 9;
+}
+
+message ExeExchangeThenLoadRequest {
+  bool isDirectChange = 2;
+  repeated ExeExchangeRequest exchangeItems = 1;
+}
+
+message ListActAggRequest {
+  string warehouseCode = 1;
+  common.StationCodeTypeEnum stationType = 2; // 1 工作站2 工作站组
+  string stationCode = 3;
+  common.ActionTypeEnum actionType = 4;
+  int64 startOfActAggId = 5;          //可不传
+  common.TransTypeEnum transType = 6; //可不传
+  string destinationCode = 7;         //可不传
+}
+
+message ListActAggContainerRequest {
+  string warehouseCode = 1;
+  common.StationCodeTypeEnum stationType = 2; // 1 工作站2 工作站组
+  string stationCode = 3;
+  common.ActionTypeEnum actionType = 4;
+  repeated string containerCode = 5;
+}
+message ContainerCtxQueryRequest {
+  string warehouseCode = 1;
+  string containerCode = 2;
+  int64 containerSerialNo = 3;
+  string transportUnitCode = 4;
+}
+
+message ContainerCtx {
+  string transCode = 1;
+  common.BizTypeEnum bizType = 2;
+  common.TransTypeEnum transType = 3;
+  string warehouseCode = 4;
+  string containerCode = 5;
+  common.ContainerTypeEnum containerType = 6;
+  int64 containerSerialNo = 7;
+  string transportUnitCode = 8;
+  string stationCode = 9;
+  string destinationCode = 10;
+  string lastLoc = 11;
+  string nextLoc = 12;
+  int32 lockFlag = 13;
+  common.LockReasonEnum lockReason = 14;
+  int64 flowFlag = 15;
+  repeated ContainerCtxException exception = 16;
+}
+
+message ContainerCtxException {
+  common.ContainerExceptionTypeEnum exceptionType = 1;
+  string exceptionMsg = 2;
+}
+
+message SendCommandRequest {
+  string warehouseCode = 1;
+  common.StationCodeTypeEnum stationType = 2;
+  string stationCode = 3;
+  string requestID = 4; //请求唯一id
+  string cmdType = 5;   //指令类型
+  string robotID = 6;   //设备id
+  string deviceSN = 7;  //设备sn	否
+  string content = 8;   //指令数据	是	参数结构体json序列化
+}

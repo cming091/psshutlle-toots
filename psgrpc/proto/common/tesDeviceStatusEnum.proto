@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+option go_package = "git-pd.megvii-inc.com/slg-service/frworkstation/internal/grpc/common";
+
+package common;
+
+option java_package = "com.megvii.lbg.wes.grpc.common";
+
+enum TesDeviceStatusEnum {
+  DeviceStatusTODO = 0;       // 未处理
+  DeviceStatusPROCESSING = 3; // 执行中
+  DeviceStatusSUCCESS = 100;  // 成功
+  DeviceStatusFAILED = 101;   // 失败
+  DeviceStatusCANCELED = 102; // 取消
+};

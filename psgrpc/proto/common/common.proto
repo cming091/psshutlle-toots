@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+option go_package = "git-pd.megvii-inc.com/slg-service/frworkstation/internal/grpc/common";
+
+package common;
+
+option java_package = "com.megvii.lbg.wes.grpc.common";
+
+message CommonResponse {
+  int64 returnCode = 1;
+  string returnMsg = 2;
+  string returnUserMsg = 3;
+}

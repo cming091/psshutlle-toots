@@ -1,0 +1,74 @@
+syntax = "proto3";
+option go_package = "git-pd.megvii-inc.com/slg-service/frworkstation/internal/grpc/warebasic";
+package warebasic;
+
+import "common.proto";
+
+service StorageService {
+  // 新增存储区
+  rpc AddStorage(AddStorageRequest) returns (common.CommonResponse) {}
+
+  // 查询存储区列表
+  rpc QueryStorageList(QueryStorageListRequest)
+      returns (QueryStorageListResponse) {}
+
+  // 查询存储区详情
+  rpc QueryStorageDetail(QueryStorageDetailRequest)
+      returns (QueryStorageDetailResponse) {}
+
+  // 更新存储区
+  rpc UpdateStorage(UpdateStorageRequest) returns (common.CommonResponse) {}
+}
+
+message AddStorageRequest {
+  string warehouseCode = 1; //仓库编码
+  string regionCode = 2;    //子仓编码
+  string storageID = 3;     //存储区ID
+  string storageCode = 4;   //存储区编码
+  string storageName = 5;   //存储区名称
+  string storageDesc = 6;   //存储区描述
+  string entryPoint = 7;    //存储区入口点
+}
+
+message QueryStorageListRequest {
+  string warehouseCode = 1; //仓库编码
+  string regionCode = 2;    //子仓编码
+}
+
+message QueryStorageListResponse {
+  int64 returnCode = 1;
+  string returnMsg = 2;
+  string returnUserMsg = 3;
+  StorageList data = 4;
+}
+
+message StorageList { repeated Storage list = 1; }
+
+message Storage {
+  string warehouseCode = 1; //仓库编码
+  string regionCode = 2;    //子仓编码
+  string storageID = 3;     //存储区ID
+  string storageCode = 4;   //存储区编码
+  string storageName = 5;   //存储区名称
+  string storageDesc = 6;   //存储区描述
+  string entryPoint = 7;    //存储区入口点
+}
+
+message QueryStorageDetailRequest {
+  string warehouseCode = 1;            //仓库编码
+  repeated string storageCodeList = 2; //存储区编码
+}
+
+message QueryStorageDetailResponse {
+  int64 returnCode = 1;
+  string returnMsg = 2;
+  string returnUserMsg = 3;
+  map<string, Storage> data = 4;
+}
+
+message UpdateStorageRequest {
+  string warehouseCode = 1; //仓库编码
+  string storageCode = 2;   //存储区编码
+  string storageName = 3;   //存储区名称
+  string storageDesc = 4;   //存储区描述
+}

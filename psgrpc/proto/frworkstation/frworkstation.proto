@@ -1,0 +1,14 @@
+syntax = "proto3";
+option go_package = "git-pd.megvii-inc.com/slg-service/frworkstation/internal/grpc/frworkstation";
+package frworkstation;
+
+import "parameters.proto";
+
+option java_multiple_files = true;
+option java_package = "com.megvii.lbg.wes.grpc.frworkstation";
+option java_outer_classname = "FRWorkStation";
+
+// ProcessFlowEngine engine message channel
+service ProcessFlowEngine {
+  rpc OnceChannel(common.ServerPackage) returns (common.ClientPackage) {}
+}

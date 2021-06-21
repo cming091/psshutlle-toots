@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+option go_package = "git-pd.megvii-inc.com/slg-service/frworkstation/internal/grpc/common";
+
+package common;
+option java_package = "com.megvii.lbg.wes.grpc.common";
+
+enum TesTaskTypEnum {
+  TaskTypeUNKNOWN = 0;
+  TaskTypeMOVE_ROBOT = 2; // 机器人移动
+  TaskTypeMOVE_POD = 3;   // 载具移动
+  TaskTypeGO_CHARGE = 4;  // 载具移动
+  TaskTypeCHANGE_MAP = 5; // 切换地图
+  TaskTypeCUSTOM = 60;    //  外部任务
+};

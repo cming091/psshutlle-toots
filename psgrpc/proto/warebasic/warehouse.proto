@@ -1,0 +1,79 @@
+syntax = "proto3";
+option go_package = "git-pd.megvii-inc.com/slg-service/frworkstation/internal/grpc/warebasic";
+package warebasic;
+
+import "common.proto";
+
+service WarehouseService {
+  // 注册仓库
+  rpc RegisterWarehouse(RegisterWarehouseRequest)
+      returns (common.CommonResponse) {}
+
+  // 查询所有仓库
+  rpc QueryAllWarehouse(QueryAllWarehouseRequest)
+      returns (QueryAllWarehouseResponse) {}
+
+  // 查询仓库详情
+  rpc QueryWarehouseDetail(QueryWarehouseDetailRequest)
+      returns (QueryWarehouseDetailResponse) {}
+
+  // 更新仓库
+  rpc UpdateWarehouse(UpdateWarehouseRequest) returns (common.CommonResponse) {}
+}
+
+message RegisterWarehouseRequest {
+  string warehouseID = 1;
+  string warehouseCode = 2;
+  string warehouseName = 3;
+}
+
+message QueryAllWarehouseRequest {}
+
+message QueryAllWarehouseResponse {
+  int64 returnCode = 1;
+  string returnMsg = 2;
+  string returnUserMsg = 3;
+  WarehouseList data = 4;
+}
+
+message WarehouseList { repeated Warehouse list = 1; }
+
+message Warehouse {
+  string warehouseID = 1;    //仓库ID
+  string warehouseCode = 2;  //仓库编码
+  string warehouseName = 3;  //仓库名称
+  string UserID = 4;         //仓库联系人
+  int32 warehouseStatus = 5; //仓库状态:1=工作中,2=休息中
+}
+
+message QueryWarehouseDetailRequest { repeated string warehouseCodeList = 1; }
+
+message QueryWarehouseDetailResponse {
+  int64 returnCode = 1;
+  string returnMsg = 2;
+  string returnUserMsg = 3;
+  map<string, WarehouseDetail> data = 4;
+}
+
+message WarehouseDetail {
+  string warehouseID = 1;    //仓库ID
+  string warehouseCode = 2;  //仓库编码
+  string warehouseName = 3;  //仓库名称
+  string UserID = 4;         //仓库联系人
+  int32 warehouseStatus = 5; //仓库状态:1=工作中,2=休息中
+  string country = 6;        //仓库所在国家
+  string province = 7;       //仓库所在省份
+  string city = 8;           //仓库所在城市
+  string address = 9;        //仓库详细地址
+  string desc = 10;          //仓库描述
+  int32 area = 11;           //仓库面积
+  int32 length = 12;         //仓库长度
+  int32 width = 13;          //仓库宽度
+  string language = 15;      //仓库语言
+  string logoUrl = 16;       //仓库Logo地址
+}
+
+message UpdateWarehouseRequest {
+  string warehouseCode = 1;
+  string warehouseName = 2;
+}

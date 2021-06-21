@@ -1,0 +1,87 @@
+syntax = "proto3";
+option go_package = "git-pd.megvii-inc.com/slg-service/frworkstation/internal/grpc/warebasic";
+package warebasic;
+
+import "common.proto";
+
+service StationGroupService {
+  // 新增工作站组
+  rpc AddStationGroup(AddStationGroupRequest) returns (common.CommonResponse) {}
+
+  // 查询工作站组列表
+  rpc QueryStationGroupList(QueryStationGroupListRequest)
+      returns (QueryStationGroupListResponse) {}
+
+  // 查询工作站组详情
+  rpc QueryStationGroupDetail(QueryStationGroupDetailRequest)
+      returns (QueryStationGroupDetailResponse) {}
+}
+
+message AddStationGroupRequest {
+  string warehouseCode = 1;     //仓库编码
+  string stationGroupID = 2;    //工作站组ID
+  string stationGroupCode = 3;  //工作站组编码
+  string stationGroupName = 4;  //工作站组名称
+  string stationGroupDesc = 5;  //工作站组描述
+  string pStationGroupCode = 6; //父工作站组编码
+  string entryPoint = 7;        //工作站组入口点
+  int32 transInvFlag = 8;       //是否库存转移标识:0=不是,1=是
+  string fromRegion = 9;        //库存转移起点子仓
+  string toRegion = 10;         //库存转移终点子仓
+}
+
+message QueryStationGroupListRequest {
+  string warehouseCode = 1;                  //仓库编码
+  repeated string pStationGroupCodeList = 2; //父工作站组编码
+}
+
+message QueryStationGroupListResponse {
+  int64 returnCode = 1;
+  string returnMsg = 2;
+  string returnUserMsg = 3;
+  StationGroupList data = 4;
+}
+
+message StationGroupList { repeated StationGroup list = 1; }
+
+message StationGroup {
+  string warehouseCode = 1;     //仓库编码
+  string stationGroupID = 2;    //工作站组ID
+  string stationGroupCode = 3;  //工作站组编码
+  string stationGroupName = 4;  //工作站组名称
+  string stationGroupDesc = 5;  //工作站组描述
+  int32 stationGroupStatus = 6; //工作站组状态:0=启用,1=禁用
+  string pStationGroupCode = 7; //父工作站组编码
+  string entryPoint = 8;        //工作站组入口点
+  int32 transInvFlag = 9;       //是否库存转移标识:0=不是,1=是
+  string fromRegion = 10;       //库存转移起点子仓
+  string toRegion = 11;         //库存转移终点子仓
+}
+
+message QueryStationGroupDetailRequest {
+  string warehouseCode = 1;                 //仓库编码
+  repeated string stationGroupCodeList = 2; //工作站组编码
+}
+
+message QueryStationGroupDetailResponse {
+  int64 returnCode = 1;
+  string returnMsg = 2;
+  string returnUserMsg = 3;
+  map<string, StationGroupDetail> data = 4;
+}
+
+message StationGroupDetail {
+  string warehouseCode = 1;           //仓库编码
+  string stationGroupID = 2;          //工作站组ID
+  string stationGroupCode = 3;        //工作站组编码
+  string stationGroupName = 4;        //工作站组名称
+  string stationGroupDesc = 5;        //工作站组描述
+  int32 stationGroupStatus = 6;       //工作站组状态:0=启用,1=禁用
+  string pStationGroupCode = 7;       //父工作站组编码
+  string entryPoint = 8;              //工作站组入口点
+  int32 transInvFlag = 9;             //是否库存转移标识:0=不是,1=是
+  string fromRegion = 10;             //库存转移起点子仓
+  string toRegion = 11;               //库存转移终点子仓
+  repeated string childrenGroup = 12; //子工作站组编码
+  repeated string stationList = 13;   //工作站列表
+}

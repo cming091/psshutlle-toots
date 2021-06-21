@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option go_package = "git-pd.megvii-inc.com/slg-service/frworkstation/internal/grpc/common";
+
+package common;
+
+option java_package = "com.megvii.lbg.wes.grpc.common";
+
+enum ContainerTypeEnum {
+  ContainerTypeUnknown = 0;     //未知类型
+  ContainerTypeOriginalBox = 1; //元箱
+  ContainerTypeCircularBox = 2; //周转箱
+  ContainerTypePallet = 3;      //托盘
+  ContainerTypeAgvShelf = 4;    // AGV货架
+  ContainerTypeSowingShelf = 5; //播种墙
+  ContainerTypeBeamShelf = 6;   //横梁货架
+};
